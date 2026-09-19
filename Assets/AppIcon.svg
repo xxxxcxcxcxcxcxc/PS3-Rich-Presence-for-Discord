@@ -13,22 +13,22 @@
       <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#06101f" flood-opacity="0.4"/>
     </filter>
   </defs>
-  <rect x="72" y="72" width="880" height="880" rx="250" fill="url(#bg)"/>
-  <circle cx="240" cy="220" r="150" fill="#a9f4ff" opacity="0.16"/>
-  <circle cx="810" cy="820" r="210" fill="#5c37bd" opacity="0.18"/>
+  <circle cx="512" cy="512" r="440" fill="url(#bg)"/>
+  <circle cx="285" cy="270" r="150" fill="#a9f4ff" opacity="0.16"/>
+  <circle cx="760" cy="770" r="210" fill="#5c37bd" opacity="0.18"/>
   <g filter="url(#shadow)">
-    <rect x="142" y="198" width="740" height="494" rx="58" fill="url(#screen)" stroke="#d7fbff" stroke-opacity="0.7" stroke-width="10"/>
-    <path d="M190 300h644" stroke="#6de2ee" stroke-opacity="0.28" stroke-width="3"/>
-    <path d="M190 596h644" stroke="#6de2ee" stroke-opacity="0.18" stroke-width="3"/>
-    <circle cx="238" cy="250" r="10" fill="#66edf4"/>
-    <circle cx="272" cy="250" r="10" fill="#66edf4" opacity="0.55"/>
-    <circle cx="306" cy="250" r="10" fill="#66edf4" opacity="0.3"/>
+    <rect x="190" y="220" width="644" height="430" rx="52" fill="url(#screen)" stroke="#d7fbff" stroke-opacity="0.7" stroke-width="10"/>
+    <path d="M230 310h564" stroke="#6de2ee" stroke-opacity="0.28" stroke-width="3"/>
+    <path d="M230 570h564" stroke="#6de2ee" stroke-opacity="0.18" stroke-width="3"/>
+    <circle cx="270" cy="265" r="10" fill="#66edf4"/>
+    <circle cx="304" cy="265" r="10" fill="#66edf4" opacity="0.55"/>
+    <circle cx="338" cy="265" r="10" fill="#66edf4" opacity="0.3"/>
     <path d="M270 478c55-75 110-75 165 0s110 75 165 0 110-75 165 0" fill="none" stroke="#75f1f2" stroke-width="24" stroke-linecap="round"/>
     <path d="M270 478c55-75 110-75 165 0s110 75 165 0 110-75 165 0" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
-    <text x="512" y="580" text-anchor="middle" fill="#d8fbff" font-family="Helvetica Neue, sans-serif" font-size="52" font-weight="700" letter-spacing="7">PS3</text>
+    <text x="512" y="550" text-anchor="middle" fill="#d8fbff" font-family="Helvetica Neue, sans-serif" font-size="52" font-weight="700" letter-spacing="7">PS3</text>
   </g>
-  <rect x="344" y="716" width="336" height="34" rx="17" fill="#d8fbff" opacity="0.8"/>
-  <rect x="420" y="764" width="184" height="24" rx="12" fill="#d8fbff" opacity="0.42"/>
-  <circle cx="806" cy="206" r="64" fill="#101c31" stroke="#9af7ff" stroke-width="8"/>
-  <path d="M778 206c12-21 24-21 36 0s24 21 36 0" fill="none" stroke="#9af7ff" stroke-width="10" stroke-linecap="round"/>
+  <rect x="360" y="700" width="304" height="30" rx="15" fill="#d8fbff" opacity="0.8"/>
+  <rect x="425" y="746" width="174" height="22" rx="11" fill="#d8fbff" opacity="0.42"/>
+  <circle cx="768" cy="250" r="58" fill="#101c31" stroke="#9af7ff" stroke-width="8"/>
+  <path d="M742 250c11-19 22-19 33 0s22 19 33 0" fill="none" stroke="#9af7ff" stroke-width="10" stroke-linecap="round"/>
 </svg>

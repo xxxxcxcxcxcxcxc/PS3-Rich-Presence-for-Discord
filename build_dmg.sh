@@ -33,6 +33,7 @@ for size in 16 32 128 256 512; do
 done
 iconutil -c icns "$ICONSET" -o "$ICON"
 chmod +x "$APP/Contents/MacOS/PS3RichPresence"
+codesign --force --deep --sign - "$APP" >/dev/null
 
 mkdir -p "$DMG_ROOT"
 cp -R "$APP" "$DMG_ROOT/$APP_NAME.app"
