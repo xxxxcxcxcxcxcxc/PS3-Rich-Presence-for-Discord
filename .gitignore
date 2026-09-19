@@ -7,3 +7,9 @@ build/
 PS3RPD.spec
 icon.ico
 logo.png
+.venv/
+__pycache__/
+.build/
+.swiftpm/
+dist/
+*.dmg

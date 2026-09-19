@@ -95,7 +95,7 @@ class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
             print(f'Error while getting host network. "{e}"')
 
         if hostNetwork is not None:
-            hostNetwork = re.search("^(.*)\.", hostNetwork).group(
+            hostNetwork = re.search(r"^(.*)\.", hostNetwork).group(
                 0
             )  # remove machine's octet
             print(f'expected network is "{hostNetwork}"')
@@ -171,6 +171,13 @@ class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
                 self.RPC.connect()
                 print("connected to Discord client")
                 break
+            except InvalidID:
+                print(
+                    "PS3RPD_ERROR: Invalid Discord Application ID. "
+                    "Copy the Application ID from discord.com/developers/applications.",
+                    flush=True,
+                )
+                raise
             except DiscordNotFound as e:
                 print(f'could not find Discord client running. "{e}"')
                 sleep(20)
@@ -391,7 +398,7 @@ class GatherDetails:
             "&amp;", ""
         )  # regex below would only remove "&" without this
         imgName = re.sub(
-            "[\W]+", "", imgName
+            r"[\W]+", "", imgName
         )  # replace any non-letter, digit, or underscore
         imgName = imgName[:32]  # maximum length of 32 characters
         self.image = imgName
@@ -444,38 +451,38 @@ while True:
             closed = False
         if prepWork.config["show_temp"]:  # first character of variable in lowercase
             gatherDetails.get_thermals()
-            gatherDetails.thermalData = gatherDetails.thermalData.replace(
-                "Â", ""
-            )  # ! bandaid fix ! ANSI encoding is being used on some users??
+            if gatherDetails.thermalData:
+                gatherDetails.thermalData = gatherDetails.thermalData.replace("Â", "")
+        else:
+            gatherDetails.thermalData = ""
         gatherDetails.decide_game_type()
         # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
         gatherDetails.name = gatherDetails.name.replace(
             "Â", ""
         )  # ! bandaid fix ! ANSI encoding is being used on some users??
 
-        if prepWork.config["use_appname"]:  # accommodate API now allowing for us to set name
-            try:
-                prepWork.RPC.update(
-                    details=gatherDetails.name,
-                    state=gatherDetails.thermalData,
-                    large_image=gatherDetails.image,
-                    large_text=gatherDetails.titleID,
-                    start=timer,
-                )
-            except (InvalidPipe, InvalidID):
-                prepWork.RPC.close()  # close Presence if Discord is not found     ! Does this actually do anything? !
-                prepWork.connect_to_discord()  # start connection loop
-        else:
-            try:
-                prepWork.RPC.update(
-                    name=gatherDetails.name,
-                    details=gatherDetails.thermalData,
-                    large_image=gatherDetails.image,
-                    large_text=gatherDetails.titleID,
-                    start=timer,
-                )
-            except (InvalidPipe, InvalidID):
-                prepWork.RPC.close()  # close Presence if Discord is not found     ! Does this actually do anything? !
-                prepWork.connect_to_discord()  # start connection loop
+        print(
+            "PS3RPD_STATUS:"
+            + json.dumps(
+                {
+                    "game": gatherDetails.name,
+                    "title_id": gatherDetails.titleID or "",
+                    "thermal": gatherDetails.thermalData or "",
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+        try:
+            prepWork.RPC.update(
+                details=gatherDetails.name,
+                state=gatherDetails.thermalData or None,
+                large_image=gatherDetails.image,
+                large_text=gatherDetails.titleID,
+                start=timer,
+            )
+        except (InvalidPipe, InvalidID):
+            prepWork.RPC.close()
+            prepWork.connect_to_discord()
         prevTitle = gatherDetails.titleID  # set new value for next loop
         sleep(prepWork.config["wait_seconds"])

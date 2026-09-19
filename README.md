@@ -35,88 +35,66 @@ Display what game you are playing on PS3 via your PC!
 * PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed 
 * PS3 and PC on the same network/internet connection
 * Discord installed and open on the PC running the script
-* Administrator permissions on the PC
-* A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
+* Python 3.9 or newer
 
-### Windows
-* [version 1.9.7 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.exe)
-or
-* [version 1.9.7 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.py)
+### Cross-platform CLI
 
-#### Installing as a Windows service (optional)
-Download [NSSM](https://nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
-WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD.exe
+The original Python worker remains available on Windows, Linux, and macOS. Run it from the project directory with [uv](https://docs.astral.sh/uv/):
 
-> [!NOTE]
-> The executable file will very likely be flagged as a virus on your computer due to `pyinstaller` being used to compile it.
-> As far as I know, there is nothing I can do to fix this.
-
-### Linux 
-
-To download and run the script for the first time:
 ```bash
-# Clone the GitHub repository under the user folder
-git clone https://github.com/zorua98741/PS3-Rich-Presence-for-Discord ~/ps3-rich-presence
-# Run the start script
-cd ~/ps3-rich-presence && ./start.py
+uv run --script PS3RPD.py
 ```
 
-From there you can run the script via double clicking on the file within your file explorer, and clicking on "Run (in terminal)".<br>
-Alternatively, you can run the command via the terminal by running `cd ~/ps3-rich-presence && ./start.py` again.
+The `start.py` launcher provides the same command for Windows, Linux, and macOS terminals. The native SwiftUI app and drag-and-drop DMG are macOS-specific additions; they do not remove the original cross-platform worker.
 
-#### Installing as a systemd service (optional)
-<details>
-  <summary>If you would like the script to start on device boot, after the first run, run the following commands in your terminal:</summary>
-<br>
-	
+### macOS 15 Sequoia and newer
+
+Install Python 3.9 or newer and the Discord desktop app. Homebrew is the simplest option:
+
 ```bash
-# Creates the user service folder if it doesn't exist yet, and the user systemd env folder
-mkdir -p ~/.config/systemd/user ~/.config/environment.d/
-# Include local binaries in your systemd user environment
-# (we need this so systemd can find the 'uv' executable)
-bash -c 'echo "
-# Adds ~/.local/bin to PATH so systemd services can find user-installed binaries
-PATH=${HOME}/.local/bin:
-" >> ~/.config/environment.d/90-path.conf'
-
-# Creates a systemd .service file in the user service folder that runs the script
-bash -c 'echo "
-[Unit]
-Description=Enables Discord Rich Presence for PS3
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-ExecStart=/usr/bin/python3 $HOME/ps3-rich-presence/start.py
-Restart=on-failure
-StandardOutput=journal
-StandardError=journal
-WorkingDirectory=$HOME/ps3-rich-presence
-
-[Install]
-WantedBy=default.target
-" > ~/.config/systemd/user/ps3rpd.service'
-# Reloads the systemd service to recognize the new service
-systemctl --user daemon-reload
-# Enables the service and starts it
-systemctl --user enable --now ps3rpd
-# Make it clear that something happened
-echo "Finished adding user service for ps3rpd."
-echo "You can check the status of the service with `systemctl --user status ps3rpd`"
+brew install python
+git clone https://github.com/your-user/PS3-Rich-Presence-for-Discord-macOS ~/ps3-rich-presence-macos
+cd ~/ps3-rich-presence-macos
+open "dist/PS3 Rich Presence.app"
 ```
 
-In order to check the health of the service, you can run `systemctl --user status ps3rpd`<br>
-For more depth logs you can use `journalctl --user -xeu ps3rpd`
-</details>
+This opens the PS3 Rich Presence desktop app. The first run creates `.venv` and installs the dependencies automatically. Enter the PS3 IP and Discord application ID in the window, click **Test PS3**, then click **Start Presence**. Keep Discord open while the app is running.
 
-## Limitations
-* __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
-* The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
-* PSX and PS2 game name depends on the name of the file
-* PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
-* PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
-* Using Windows 7 is only possible with up to PS3RPD version 1.7.2
-	- If you want to use a .exe, [here](https://www.mediafire.com/file/ezzlcemhkmnmyn2/PS3RPD.exe/file) is a version that may or may not fully function (very little bug testing has been done)
+Rich Presence appears on your personal Discord account through the open Discord desktop app. No bot account, bot invite, or bot token is used. The required app ID is copied from **Discord Developer Portal > Applications > your application > General Information > Application ID**. A random Discord user ID or bot token will produce `Client ID is Invalid`.
+
+To build the distributable installer from source:
+
+```bash
+./build_dmg.sh
+open "dist/PS3-Rich-Presence-macOS.dmg"
+```
+
+The generated app uses the macOS 26 Liquid Glass API when built with the macOS 26 SDK. On macOS 15 it uses the matching translucent material fallback. The packaged files are `dist/PS3 Rich Presence.app` and `dist/PS3-Rich-Presence-macOS.dmg`.
+
+### Project structure
+
+* `Sources/PS3RichPresence/main.swift` - native SwiftUI app and Discord/PS3 controls
+* `Assets/AppIcon.svg` - source artwork for the macOS app icon
+* `Info.plist` - app metadata and icon declaration
+* `PS3RPD.py` - PS3 webMAN and Discord Rich Presence worker
+* `bootstrap.py` - creates the Python environment, then starts the worker
+* `build_dmg.sh` - builds the `.app`, generates `AppIcon.icns`, and creates the DMG
+
+## Contributing to the original repository
+
+Do not push directly to the original owner's repository. Create your own fork on GitHub, then push this branch to your fork:
+
+```bash
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR-USER/PS3-Rich-Presence-for-Discord.git
+git add .
+git commit -m "Add native macOS app with Rich Presence UI"
+git push -u origin main
+```
+
+Then open your fork on GitHub and choose **Contribute > Open pull request**. Set the base repository to `zorua98741/PS3-Rich-Presence-for-Discord`, base branch `main`, review the changed files, and create the Pull Request. The owner can review and merge it; you do not need write access to their repository.
+
+If macOS asks whether the app may access Discord or the local network, allow it in **System Settings > Privacy & Security**. The app stores its config and Python environment in `~/Library/Application Support/PS3 Rich Presence`.
 
 ## Contact Me
 Contact me via Discord: `zorua98741`/`zorua98741#0023`.
