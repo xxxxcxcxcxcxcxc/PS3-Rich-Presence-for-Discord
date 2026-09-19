@@ -5,6 +5,7 @@
 #     "networkscan",
 #     "pypresence",
 #     "requests",
+#     "urllib3<2",
 # ]
 # ///
 from pathlib import Path
