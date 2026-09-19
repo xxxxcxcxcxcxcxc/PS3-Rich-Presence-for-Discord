@@ -80,26 +80,8 @@ The generated app uses the macOS 26 Liquid Glass API when built with the macOS 2
 * `bootstrap.py` - creates the Python environment, then starts the worker
 * `build_dmg.sh` - builds the `.app`, generates `AppIcon.icns`, and creates the DMG
 
-## Contributing to the original repository
 
-Do not push directly to the original owner's repository. Create your own fork on GitHub, then push this branch to your fork:
 
-```bash
-git remote rename origin upstream
-git remote add origin https://github.com/YOUR-USER/PS3-Rich-Presence-for-Discord.git
-git add .
-git commit -m "Add native macOS app with Rich Presence UI"
-git push -u origin main
-```
-
-Then open your fork on GitHub and choose **Contribute > Open pull request**. Set the base repository to `zorua98741/PS3-Rich-Presence-for-Discord`, base branch `main`, review the changed files, and create the Pull Request. The owner can review and merge it; you do not need write access to their repository.
-
-If macOS asks whether the app may access Discord or the local network, allow it in **System Settings > Privacy & Security**. The app stores its config and Python environment in `~/Library/Application Support/PS3 Rich Presence`.
-
-## Contact Me
-Contact me via Discord: `zorua98741`/`zorua98741#0023`.
-
-## Additional Information
 
 ### GameTDB
 This script can utilise images provided by [GameTDB](https://www.gametdb.com/), if you are able, consider supporting the service.
