@@ -8,6 +8,7 @@ DMG="$ROOT/dist/PS3-Rich-Presence-macOS.dmg"
 DMG_ROOT="$ROOT/.build/dmg-root"
 ICONSET="$ROOT/.build/PS3RichPresence.iconset"
 ICON="$APP/Contents/Resources/AppIcon.icns"
+ICON_SOURCE="$ROOT/.build/AppIcon-1024.png"
 BACKGROUND="$ROOT/.build/InstallerBackground.png"
 SIGNING_IDENTITY="${APPLE_SIGNING_IDENTITY:--}"
 
@@ -29,12 +30,11 @@ cp bootstrap.py PS3RPD.py "$APP/Contents/Resources/"
 
 rm -rf "$ICONSET"
 mkdir -p "$ICONSET"
-qlmanage -t -s 1024 -o "$ICONSET" "$ROOT/Assets/AppIcon.svg" >/dev/null 2>&1
-mv "$ICONSET/AppIcon.svg.png" "$ICONSET/icon_1024x1024.png"
+sips -s format png "$ROOT/Assets/AppIcon.svg" --out "$ICON_SOURCE" >/dev/null
 for size in 16 32 128 256 512; do
-	sips -z "$size" "$size" "$ICONSET/icon_1024x1024.png" --out "$ICONSET/icon_${size}x${size}@1x.png" >/dev/null
+	sips -z "$size" "$size" "$ICON_SOURCE" --out "$ICONSET/icon_${size}x${size}.png" >/dev/null
 	double=$((size * 2))
-	sips -z "$double" "$double" "$ICONSET/icon_1024x1024.png" --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
+	sips -z "$double" "$double" "$ICON_SOURCE" --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
 done
 iconutil -c icns "$ICONSET" -o "$ICON"
 chmod +x "$APP/Contents/MacOS/PS3RichPresence"
