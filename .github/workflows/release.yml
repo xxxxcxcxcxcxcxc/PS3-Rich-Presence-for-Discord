@@ -12,12 +12,43 @@ jobs:
   macos:
     name: Build macOS DMG
     runs-on: macos-15
+    env:
+      APPLE_SIGNING_CERT: ${{ secrets.APPLE_SIGNING_CERT }}
+      APPLE_SIGNING_CERT_PASSWORD: ${{ secrets.APPLE_SIGNING_CERT_PASSWORD }}
+      APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY_NAME || '-' }}
+      APPLE_ID_EMAIL: ${{ secrets.APPLE_ID_EMAIL }}
+      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      APPLE_ID_TEAM: ${{ secrets.APPLE_ID_TEAM }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install DMG tooling
+        run: brew install create-dmg
+
+      - name: Import Apple signing certificate
+        if: ${{ env.APPLE_SIGNING_CERT != '' }}
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ env.APPLE_SIGNING_CERT }}
+          p12-password: ${{ env.APPLE_SIGNING_CERT_PASSWORD }}
+
       - name: Build DMG
         run: ./build_dmg.sh
+
+      - name: Notarize DMG
+        if: ${{ env.APPLE_ID_EMAIL != '' && env.APPLE_ID_PASSWORD != '' && env.APPLE_ID_TEAM != '' }}
+        run: |
+          xcrun notarytool submit dist/PS3-Rich-Presence-macOS.dmg \
+            --apple-id "$APPLE_ID_EMAIL" \
+            --password "$APPLE_ID_PASSWORD" \
+            --team-id "$APPLE_ID_TEAM" \
+            --wait
+          xcrun stapler staple dist/PS3-Rich-Presence-macOS.dmg
+        env:
+          APPLE_ID_EMAIL: ${{ secrets.APPLE_ID_EMAIL }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_ID_TEAM: ${{ secrets.APPLE_ID_TEAM }}
 
       - name: Upload macOS DMG
         uses: actions/upload-artifact@v4

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="460" viewBox="0 0 760 460">
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101b2c"/>
+      <stop offset="1" stop-color="#1a3b58"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="460" fill="url(#surface)"/>
+  <circle cx="92" cy="70" r="170" fill="#73e8f2" opacity="0.08"/>
+  <circle cx="700" cy="420" r="210" fill="#738cff" opacity="0.08"/>
+  <text x="380" y="92" text-anchor="middle" fill="#eafcff" font-family="Helvetica Neue, sans-serif" font-size="26" font-weight="700">PS3 Rich Presence</text>
+  <text x="380" y="126" text-anchor="middle" fill="#a9c8d8" font-family="Helvetica Neue, sans-serif" font-size="16">Drag the app to Applications to install</text>
+  <path d="M315 250h110" fill="none" stroke="#80edf2" stroke-width="5" stroke-linecap="round"/>
+  <path d="m405 225 25 25-25 25" fill="none" stroke="#80edf2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M268 314h224" stroke="#80edf2" stroke-opacity="0.2" stroke-width="2"/>
+</svg>
