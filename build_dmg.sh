@@ -11,9 +11,14 @@ ICON="$APP/Contents/Resources/AppIcon.icns"
 
 cd "$ROOT"
 swift build -c release
+SWIFT_BINARY="$(find .build -path '*/release/PS3RichPresence' -type f -perm -111 -print -quit)"
+if [[ -z "$SWIFT_BINARY" ]]; then
+	echo "Could not find the Swift release binary" >&2
+	exit 1
+fi
 rm -rf "$APP" "$DMG" "$DMG_ROOT"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp ".build/arm64-apple-macosx/release/PS3RichPresence" "$APP/Contents/MacOS/PS3RichPresence"
+cp "$SWIFT_BINARY" "$APP/Contents/MacOS/PS3RichPresence"
 cp Info.plist "$APP/Contents/Info.plist"
 cp bootstrap.py PS3RPD.py "$APP/Contents/Resources/"
 

@@ -80,9 +80,6 @@ The generated app uses the macOS 26 Liquid Glass API when built with the macOS 2
 * `bootstrap.py` - creates the Python environment, then starts the worker
 * `build_dmg.sh` - builds the `.app`, generates `AppIcon.icns`, and creates the DMG
 
-
-
-
 ### GameTDB
 This script can utilise images provided by [GameTDB](https://www.gametdb.com/), if you are able, consider supporting the service.
 

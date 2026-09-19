@@ -13,3 +13,4 @@ __pycache__/
 .swiftpm/
 dist/
 *.dmg
+RELEASE_SETUP.local.md
